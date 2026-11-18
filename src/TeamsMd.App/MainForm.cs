@@ -7,6 +7,9 @@ internal sealed class MainForm : Form
 {
     private readonly TextBox _input;
     private readonly Label _status;
+    private readonly DraftStore _draft = new(Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "TeamsMd"));
+    private readonly System.Windows.Forms.Timer _saveTimer = new() { Interval = 1000 };
 
     // Primary button colours: brand purple, darker on hover/press.
     private static readonly Color Primary = Color.FromArgb(0x5B, 0x5F, 0xC7);
@@ -80,7 +83,32 @@ internal sealed class MainForm : Form
         Controls.Add(_input);
         Controls.Add(bottom);
 
+        // Restore the last draft. No draft yet means first launch: show the paste-test sample,
+        // selected so typing or pasting replaces it.
+        var saved = _draft.Load();
+        if (saved is null)
+        {
+            _input.Text = SampleMarkdown.Text.ReplaceLineEndings("\r\n"); // TextBox needs CRLF for line breaks
+            Shown += (_, _) => _input.SelectAll();
+        }
+        else
+        {
+            _input.Text = saved;
+        }
+
+        // Save a second after typing stops, and on close.
+        _saveTimer.Tick += (_, _) => SaveDraft();
+        _input.TextChanged += (_, _) => { _saveTimer.Stop(); _saveTimer.Start(); };
+        FormClosing += (_, _) => SaveDraft();
+
         ResumeLayout(performLayout: true);
+    }
+
+    private void SaveDraft()
+    {
+        _saveTimer.Stop();
+        if (!_draft.Save(_input.Text))
+            _status.Text = "Couldn't save draft";
     }
 
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -88,6 +116,12 @@ internal sealed class MainForm : Form
         if (keyData == (Keys.Control | Keys.Enter))
         {
             CopyForTeams();
+            return true;
+        }
+        // Multiline TextBox doesn't support Ctrl+A natively; needed to clear the sample quickly.
+        if (keyData == (Keys.Control | Keys.A) && _input.Focused)
+        {
+            _input.SelectAll();
             return true;
         }
         return base.ProcessCmdKey(ref msg, keyData);
