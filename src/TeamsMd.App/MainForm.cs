@@ -40,7 +40,7 @@ internal sealed class MainForm : Form
 
         var copyButton = new Button
         {
-            Text = "Copy for Teams",
+            Text = "Copy as Rich Text",
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             MinimumSize = new Size(160, 40),
@@ -57,12 +57,14 @@ internal sealed class MainForm : Form
         copyButton.FlatAppearance.MouseOverBackColor = PrimaryHover;
         copyButton.FlatAppearance.MouseDownBackColor = PrimaryPressed;
         copyButton.Click += (_, _) => CopyForTeams();
+        new ToolTip().SetToolTip(copyButton,
+            "Copies formatted text (headings, bold, lists, tables, code) ready to paste into Teams");
 
         _status = new Label
         {
             AutoSize = true,
             Anchor = AnchorStyles.Left,
-            Text = "Ctrl+Enter to copy",
+            Text = "Ctrl+Enter to copy as rich text",
         };
 
         // Bottom strip sizes itself to the button, so the text can't be clipped.
@@ -144,7 +146,7 @@ internal sealed class MainForm : Form
         try
         {
             Clipboard.SetDataObject(data, copy: true, retryTimes: 10, retryDelay: 100);
-            _status.Text = "Copied";
+            _status.Text = "Copied as rich text — paste into Teams";
         }
         catch (ExternalException)
         {
