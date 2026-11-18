@@ -40,6 +40,16 @@ public class MarkdownConverterTests
     public void No_class_attributes() =>
         Assert.DoesNotContain("class=", MarkdownConverter.ToHtml("```cs\nx\n```\n\n- [x] done"));
 
+    // Teams strips <input> form controls, so checkbox state must be carried as text.
+    [Fact]
+    public void Task_list_state_survives_as_text()
+    {
+        var h = MarkdownConverter.ToHtml("- [x] done\n- [ ] todo");
+        Assert.DoesNotContain("<input", h);
+        Assert.Contains("☑ done", h);
+        Assert.Contains("☐ todo", h);
+    }
+
     // Review Focus 2: angle brackets in prose must stay visible text.
     [Fact]
     public void Angle_brackets_are_literal()

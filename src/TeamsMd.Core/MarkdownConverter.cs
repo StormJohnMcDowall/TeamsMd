@@ -1,6 +1,8 @@
 using Markdig;
+using Markdig.Extensions.TaskLists;
 using Markdig.Renderers.Html;
 using Markdig.Syntax;
+using Markdig.Syntax.Inlines;
 
 namespace TeamsMd.Core;
 
@@ -20,8 +22,14 @@ public static class MarkdownConverter
         var document = Markdown.Parse(markdown.Replace("\r\n", "\n"), Pipeline);
 
         // Teams strips CSS classes anyway; drop them so the output is plain semantic HTML.
-        foreach (var node in document.Descendants())
+        foreach (var node in document.Descendants().ToList())
+        {
             node.TryGetAttributes()?.Classes?.Clear();
+
+            // Teams strips <input> checkboxes, so show the state as a character instead.
+            if (node is TaskList task)
+                task.ReplaceBy(new LiteralInline(task.Checked ? "☑" : "☐"));
+        }
 
         return document.ToHtml(Pipeline);
     }
