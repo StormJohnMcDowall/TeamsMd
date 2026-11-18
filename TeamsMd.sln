@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamsMd.Core.Tests", "tests\TeamsMd.Core.Tests\TeamsMd.Core.Tests.csproj", "{64F63E65-C867-4B88-BB4E-6725D5252985}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamsMd.App", "src\TeamsMd.App\TeamsMd.App.csproj", "{835698A8-B990-4AB6-98EA-28EFAFFA3732}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,18 @@ Global
 		{64F63E65-C867-4B88-BB4E-6725D5252985}.Release|x64.Build.0 = Release|Any CPU
 		{64F63E65-C867-4B88-BB4E-6725D5252985}.Release|x86.ActiveCfg = Release|Any CPU
 		{64F63E65-C867-4B88-BB4E-6725D5252985}.Release|x86.Build.0 = Release|Any CPU
+		{835698A8-B990-4AB6-98EA-28EFAFFA3732}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{835698A8-B990-4AB6-98EA-28EFAFFA3732}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{835698A8-B990-4AB6-98EA-28EFAFFA3732}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{835698A8-B990-4AB6-98EA-28EFAFFA3732}.Debug|x64.Build.0 = Debug|Any CPU
+		{835698A8-B990-4AB6-98EA-28EFAFFA3732}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{835698A8-B990-4AB6-98EA-28EFAFFA3732}.Debug|x86.Build.0 = Debug|Any CPU
+		{835698A8-B990-4AB6-98EA-28EFAFFA3732}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{835698A8-B990-4AB6-98EA-28EFAFFA3732}.Release|Any CPU.Build.0 = Release|Any CPU
+		{835698A8-B990-4AB6-98EA-28EFAFFA3732}.Release|x64.ActiveCfg = Release|Any CPU
+		{835698A8-B990-4AB6-98EA-28EFAFFA3732}.Release|x64.Build.0 = Release|Any CPU
+		{835698A8-B990-4AB6-98EA-28EFAFFA3732}.Release|x86.ActiveCfg = Release|Any CPU
+		{835698A8-B990-4AB6-98EA-28EFAFFA3732}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -52,5 +66,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{C10FCBC7-1E7C-47F3-B48C-56AF0CA6046B} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{64F63E65-C867-4B88-BB4E-6725D5252985} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{835698A8-B990-4AB6-98EA-28EFAFFA3732} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 	EndGlobalSection
 EndGlobal
