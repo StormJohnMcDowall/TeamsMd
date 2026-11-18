@@ -8,8 +8,19 @@ internal sealed class MainForm : Form
     private readonly TextBox _input;
     private readonly Label _status;
 
+    // Primary button colours: brand purple, darker on hover/press.
+    private static readonly Color Primary = Color.FromArgb(0x5B, 0x5F, 0xC7);
+    private static readonly Color PrimaryHover = Color.FromArgb(0x4F, 0x52, 0xB2);
+    private static readonly Color PrimaryPressed = Color.FromArgb(0x44, 0x47, 0x91);
+
     public MainForm()
     {
+        SuspendLayout();
+
+        // Sizes below are written for 96 DPI; scale them up on high-DPI displays.
+        AutoScaleDimensions = new SizeF(96f, 96f);
+        AutoScaleMode = AutoScaleMode.Dpi;
+
         Text = "TeamsMd";
         ClientSize = new Size(700, 500);
         StartPosition = FormStartPosition.CenterScreen;
@@ -28,23 +39,48 @@ internal sealed class MainForm : Form
         {
             Text = "Copy for Teams",
             AutoSize = true,
-            Dock = DockStyle.Right,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            MinimumSize = new Size(160, 40),
+            Padding = new Padding(14, 6, 14, 6),
+            Anchor = AnchorStyles.Right,
+            Font = new Font(Font.FontFamily, 10f, FontStyle.Bold),
+            FlatStyle = FlatStyle.Flat,
+            BackColor = Primary,
+            ForeColor = Color.White,
+            Cursor = Cursors.Hand,
+            UseVisualStyleBackColor = false,
         };
+        copyButton.FlatAppearance.BorderSize = 0;
+        copyButton.FlatAppearance.MouseOverBackColor = PrimaryHover;
+        copyButton.FlatAppearance.MouseDownBackColor = PrimaryPressed;
         copyButton.Click += (_, _) => CopyForTeams();
 
         _status = new Label
         {
-            Dock = DockStyle.Fill,
-            TextAlign = ContentAlignment.MiddleLeft,
+            AutoSize = true,
+            Anchor = AnchorStyles.Left,
             Text = "Ctrl+Enter to copy",
         };
 
-        var bottom = new Panel { Dock = DockStyle.Bottom, Height = 40, Padding = new Padding(6) };
-        bottom.Controls.Add(_status);
-        bottom.Controls.Add(copyButton);
+        // Bottom strip sizes itself to the button, so the text can't be clipped.
+        var bottom = new TableLayoutPanel
+        {
+            Dock = DockStyle.Bottom,
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            ColumnCount = 2,
+            RowCount = 1,
+            Padding = new Padding(8),
+        };
+        bottom.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f));
+        bottom.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        bottom.Controls.Add(_status, 0, 0);
+        bottom.Controls.Add(copyButton, 1, 0);
 
         Controls.Add(_input);
         Controls.Add(bottom);
+
+        ResumeLayout(performLayout: true);
     }
 
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
