@@ -57,7 +57,7 @@ The app you paste into picks the format it understands.
 | Strikethrough | `~~text~~` | |
 | Bulleted and numbered lists | `- item`, `1. item` | Nesting works |
 | Task lists | `- [x] done`, `- [ ] todo` | Shown as ☑ / ☐, because Teams strips checkboxes |
-| Links | `[text](https://…)` or a bare URL | |
+| Links | `[text](https://…)` or a bare URL | A bare URL is shown without `https://`, otherwise Teams swaps in the page title |
 | Inline code | `` `code` `` | |
 | Code blocks | ` ``` ` fences | No syntax colouring; the language name is ignored |
 | Block quotes | `> quote` | |
@@ -68,7 +68,7 @@ The app you paste into picks the format it understands.
 
 - **Single line breaks are joined.** Following standard Markdown, two lines separated by a single Enter become one line. Leave a blank line between them to start a new paragraph.
 - **HTML in your text is shown as text.** Writing `<b>` or `List<string>` displays exactly that and doesn't change the formatting.
-- **Teams has the final say.** Teams cleans up anything it pastes. For example, it centres table headers, adds line numbers to code blocks, and may replace a bare URL with the page's title.
+- **Teams has the final say.** Teams cleans up anything it pastes. For example, it centres table headers and adds line numbers to code blocks.
 
 ## Building from source
 

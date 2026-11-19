@@ -31,9 +31,19 @@ public class MarkdownConverterTests
     public void Pipe_table() =>
         Assert.Contains("<table>", MarkdownConverter.ToHtml("| a | b |\n|---|---|\n| 1 | 2 |"));
 
+    // Teams replaces a link's text with the page title when the text equals the href,
+    // so raw URLs are shown without their scheme.
+    [Theory]
+    [InlineData("see https://e.com", "<a href=\"https://e.com\">e.com</a>")]
+    [InlineData("see http://e.com/a?b=1", "<a href=\"http://e.com/a?b=1\">e.com/a?b=1</a>")]
+    [InlineData("see <https://e.com>", "<a href=\"https://e.com\">e.com</a>")]
+    [InlineData("see www.e.com", "<a href=\"http://www.e.com\">www.e.com</a>")]
+    public void Autolink_text_differs_from_href(string md, string expected) =>
+        Assert.Contains(expected, MarkdownConverter.ToHtml(md));
+
     [Fact]
-    public void Autolink() =>
-        Assert.Contains("<a href=\"https://e.com\">https://e.com</a>", MarkdownConverter.ToHtml("see https://e.com"));
+    public void Explicit_link_text_is_untouched() =>
+        Assert.Contains("<a href=\"https://e.com\">https://e.com</a>", MarkdownConverter.ToHtml("[https://e.com](https://e.com)"));
 
     // Fenced code language and task lists both add class attributes by default; Teams strips them.
     [Fact]

@@ -1,4 +1,5 @@
 using Markdig;
+using Markdig.Helpers;
 using Markdig.Extensions.TaskLists;
 using Markdig.Renderers.Html;
 using Markdig.Syntax;
@@ -29,8 +30,30 @@ public static class MarkdownConverter
             // Teams strips <input> checkboxes, so show the state as a character instead.
             if (node is TaskList task)
                 task.ReplaceBy(new LiteralInline(task.Checked ? "☑" : "☐"));
+
+            // Teams replaces a link's text with the page title when the text equals the href,
+            // so show raw URLs without their scheme.
+            if (node is AutolinkInline { IsEmail: false } angle)
+            {
+                var link = new LinkInline(angle.Url, "") { IsAutoLink = true };
+                link.AppendChild(new LiteralInline(StripScheme(angle.Url)));
+                angle.ReplaceBy(link);
+            }
+            else if (node is LinkInline { IsAutoLink: true, FirstChild: LiteralInline text } bare
+                     && text.Content.ToString() == bare.Url)
+            {
+                text.Content = new StringSlice(StripScheme(bare.Url));
+            }
         }
 
         return document.ToHtml(Pipeline);
+    }
+
+    private static string StripScheme(string url)
+    {
+        foreach (var scheme in new[] { "https://", "http://" })
+            if (url.StartsWith(scheme, StringComparison.OrdinalIgnoreCase))
+                return url[scheme.Length..];
+        return url;
     }
 }
